@@ -13,6 +13,7 @@ import {
     useDisclosure
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
+import { Toc } from "@open-pioneer/toc";
 import { useRef } from "react";
 import { MdFilterAlt } from "react-icons/md";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -44,7 +45,9 @@ export function FilterComponent() {
                     <DrawerCloseButton />
                     <DrawerHeader>{intl.formatMessage({ id: "filterLabel" })}</DrawerHeader>
 
-                    <DrawerBody></DrawerBody>
+                    <DrawerBody>
+                        <Toc showBasemapSwitcher={false}></Toc>
+                    </DrawerBody>
 
                     <DrawerFooter>
                         <Button onClick={onClose} w="100%">

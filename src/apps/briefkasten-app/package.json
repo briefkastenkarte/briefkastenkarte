@@ -2,6 +2,7 @@
     "name": "briefkasten-app",
     "private": true,
     "dependencies": {
+        "@briefkastenkarte/overpass-api": "workspace:^",
         "@chakra-ui/icons": "catalog:",
         "@emotion/react": "catalog:",
         "@emotion/styled": "catalog:",
@@ -16,6 +17,7 @@
         "@open-pioneer/runtime": "catalog:",
         "@open-pioneer/search": "catalog:",
         "@open-pioneer/theme": "catalog:",
+        "@open-pioneer/toc": "catalog:",
         "ol": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",

@@ -10,3 +10,7 @@ messages:
   filterLabel: "Searchfilter"
   cancel: "Cancel"
   close: "Close"
+
+overrides:
+  "@open-pioneer/toc":
+    operationalLayerLabel: "Select location types"

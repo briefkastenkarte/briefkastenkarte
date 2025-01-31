@@ -1,0 +1,30 @@
+{
+    "name": "@briefkastenkarte/overpass-api",
+    "version": "0.0.1",
+    "description": "This package provides utilities to work with Overpass API services.",
+    "license": "Apache-2.0",
+    "main": "index.ts",
+    "repository": {
+        "type": "git",
+        "url": "hhttps://github.com/briefkastenkarte-de/briefkastenkarte",
+        "directory": "src/packages/overpass-api"
+    },
+    "homepage": "https://github.com/briefkastenkarte-de/briefkastenkarte",
+    "keywords": [
+        "briefkastenkarte",
+        "overpass",
+        "osm"
+    ],
+    "scripts": {
+        "build": "build-pioneer-package"
+    },
+    "dependencies": {
+        "@open-pioneer/http": "catalog:",
+        "ol": "catalog:"
+    },
+    "devDependencies": {},
+    "publishConfig": {
+        "directory": "dist",
+        "linkDirectory": false
+    }
+}
