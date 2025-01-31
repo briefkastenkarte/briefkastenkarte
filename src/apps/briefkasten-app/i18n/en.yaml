@@ -1,0 +1,12 @@
+messages:
+  ariaLabel:
+    header: "Header bar"
+    map: "Map. Use the arrow keys to move the map. Zoom in with the plus button and zoom out with the minus button."
+    topLeft: "Maptools"
+    topRight: "Filter by location type, etc."
+    bottomLeft: "Coordinate viewer"
+    bottomLeft2: "Basemap switcher"
+  basemapLabel: "Select basemap:"
+  filterLabel: "Searchfilter"
+  cancel: "Cancel"
+  close: "Close"

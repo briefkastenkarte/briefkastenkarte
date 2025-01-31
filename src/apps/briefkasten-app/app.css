@@ -1,0 +1,7 @@
+.search-box {
+    position: absolute;
+    width: 500px;
+    max-width: 60%;
+    z-index: 1;
+    top: 8px;
+}

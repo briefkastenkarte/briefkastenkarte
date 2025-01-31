@@ -1,0 +1,12 @@
+messages:
+  ariaLabel:
+    header: "Kopfleiste"
+    map: "Karte. Mit den Pfeiltasten kannst du die Karte bewegen. Mit der Plus Taste hineinzoomen und mit der Minus Taste herauszoomen."
+    topLeft: "Kartenwerkzeuge"
+    topRight: "Filter nach Standort-Typen, etc."
+    bottomLeft: "Koordinatenanzeige"
+    bottomLeft2: "Auswahl der Hintergrundkarte"
+  basemapLabel: "Hintergrundkarte auswählen:"
+  filterLabel: "Suchfilter"
+  cancel: "Abbrechen"
+  close: "Schließen"

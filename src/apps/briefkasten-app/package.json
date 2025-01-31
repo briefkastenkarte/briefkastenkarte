@@ -1,0 +1,25 @@
+{
+    "name": "briefkasten-app",
+    "private": true,
+    "dependencies": {
+        "@chakra-ui/icons": "catalog:",
+        "@emotion/react": "catalog:",
+        "@emotion/styled": "catalog:",
+        "@open-pioneer/basemap-switcher": "catalog:",
+        "@open-pioneer/chakra-integration": "catalog:",
+        "@open-pioneer/coordinate-viewer": "catalog:",
+        "@open-pioneer/geolocation": "catalog:",
+        "@open-pioneer/map": "catalog:",
+        "@open-pioneer/map-navigation": "catalog:",
+        "@open-pioneer/map-ui-components": "catalog:",
+        "@open-pioneer/notifier": "catalog:",
+        "@open-pioneer/runtime": "catalog:",
+        "@open-pioneer/search": "catalog:",
+        "@open-pioneer/theme": "catalog:",
+        "ol": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "react-icons": "catalog:",
+        "react-use": "catalog:"
+    }
+}
