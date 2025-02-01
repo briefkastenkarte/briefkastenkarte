@@ -29,6 +29,7 @@ export class MapConfigProviderImpl implements MapConfigProvider {
                 view: new View({
                     center: [350500, 5675000],
                     zoom: 14,
+                    maxZoom: 19,
                     constrainResolution: true,
                     projection: "EPSG:25832"
                 })
