@@ -2,8 +2,10 @@
 // SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte-de)
 // SPDX-License-Identifier: Apache-2.0
 import { DeclaredService } from "@open-pioneer/runtime";
+import { Feature } from "ol";
+import { Geometry } from "ol/geom";
 import { AttributionLike } from "ol/source/Source";
-import VectorSource from "ol/source/Vector";
+import VectorSource, { Options } from "ol/source/Vector";
 
 /**
  * These are properties for Overpass API vector source.
@@ -29,6 +31,11 @@ export interface OverpassApiVectorSourceOptions {
      * Optional attribution for the layer (e.g. copyright hints).
      */
     attributions?: AttributionLike | undefined;
+
+    /**
+     * Optional additional options for the VectorSource.
+     */
+    additionalOptions?: Options<Feature<Geometry>>;
 
     /**
      * Use this function to rewrite the URL used to fetch features from an Overpass API service.

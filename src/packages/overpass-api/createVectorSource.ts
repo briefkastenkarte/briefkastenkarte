@@ -11,6 +11,7 @@ import OSMXML from "ol/format/OSMXML";
 import { transformExtent } from "ol/proj";
 import FeatureFormat from "ol/format/Feature";
 import { FeatureLike } from "ol/Feature";
+import { createRequestUrl, loadFeatures, queryFeatures } from "./requestUtils";
 import { Extent } from "ol/extent";
 
 const LOG = createLogger("overpass-api:OverpassApiSourceFactory");
@@ -50,12 +51,15 @@ export function _createVectorSource(
     options: OverpassApiVectorSourceOptions,
     internals: InternalOptions
 ): VectorSource {
+    const { additionalOptions, attributions, baseUrl, query, timeout, rewriteUrl } = options;
+
     const httpService = internals.httpService;
 
     const vectorSrc = new VectorSource({
         format: new OSMXML(),
         strategy: bbox,
-        attributions: options.attributions
+        attributions: attributions,
+        ...additionalOptions
     });
 
     const queryFeaturesFunc = internals.queryFeaturesParam ?? queryFeatures;
@@ -65,14 +69,14 @@ export function _createVectorSource(
         function (features: FeatureLike[]) {
             LOG.debug(`Adding ${features.length} features`);
 
-            // Type mismatch FeatureLike <--> Feature<Geometry>
-            // MIGHT be incorrect! We will see.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             vectorSrc.addFeatures(features as any);
         };
 
-    // Abort controller for the currently pending request(s).
-    // Used to cancel outdated requests.
+    /**
+     * Abort controller for the currently pending request(s).
+     * Used to cancel outdated requests.
+     */
     let abortController: AbortController;
 
     const loaderFunction: FeatureLoader = async (
@@ -82,17 +86,23 @@ export function _createVectorSource(
         success,
         failure
     ): Promise<void> => {
+        const bbox = transformExtent(extent, "EPSG:25832", "EPSG:4326");
+        const newExtent = [bbox[1], bbox[0], bbox[3], bbox[2]] as Extent;
+
         const url = createRequestUrl(
-            options.baseUrl,
-            options.timeout ?? DEFAULT_TIMEOUT,
-            options.query,
-            extent,
-            options.rewriteUrl
+            baseUrl,
+            timeout ?? DEFAULT_TIMEOUT,
+            query,
+            newExtent,
+            rewriteUrl
         );
 
-        // An extent-change should cancel open requests for older extents, because otherwise,
-        // old and expensive requests could block new requests for a new extent
-        // => no features are drawn on the current map for a long time.
+        /**
+         * An extent-change should cancel open requests for older extents, because otherwise,
+         * old and expensive requests could block new requests for a new extent
+         *
+         * => no features are drawn on the current map for a long time.
+         */
         abortController?.abort("Extent changed");
         abortController = new AbortController();
 
@@ -140,70 +150,4 @@ export interface LoadFeatureOptions {
     signal: AbortSignal;
     queryFeatures: QueryFeaturesFunc;
     addFeatures: AddFeaturesFunc;
-}
-
-/**
- * @internal
- * Creates request url.
- */
-export function createRequestUrl(
-    baseUrl: string,
-    timeout: number,
-    query: string,
-    extent: Extent,
-    rewriteUrl?: (url: URL) => URL | undefined
-): URL {
-    // Transform extent for Overpass API request
-    const newExtent = transformExtent(extent, "EPSG:25832", "EPSG:4326");
-    const bbox = [newExtent[1], newExtent[0], newExtent[3], newExtent[2]].join(",");
-
-    const url = `${baseUrl}/?data=[bbox:${bbox}][out:xml][timeout:${timeout}];(${query});out;>;out skel qt;`;
-
-    const urlObj = new URL(url);
-    return rewriteUrl?.(new URL(urlObj)) ?? urlObj;
-}
-
-/**
- * @internal
- * Fetches features.
- */
-export async function loadFeatures(options: LoadFeatureOptions): Promise<FeatureResponse> {
-    const { url, httpService, featureFormat, signal, queryFeatures, addFeatures } = options;
-
-    const featureResponse = await queryFeatures(url, httpService, featureFormat, signal);
-    const features = featureResponse.features as FeatureLike[];
-    addFeatures(features);
-    return featureResponse;
-}
-
-/**
- * Performs a single request against the service
- */
-export async function queryFeatures(
-    url: URL,
-    httpService: HttpService,
-    featureFormat: FeatureFormat,
-    signal?: AbortSignal
-): Promise<FeatureResponse> {
-    let features: FeatureLike[] = [];
-    const requestInit: RequestInit = {
-        signal
-    };
-    const response = await httpService.fetch(url, requestInit);
-    if (response.status !== 200) {
-        throw new Error(`Failed to query features from service (status code ${response.status})`);
-    }
-    const xml = await response.text();
-    if (featureFormat) {
-        features = featureFormat.readFeatures(xml, {
-            featureProjection: "EPSG:25832",
-            dataProjection: "EPSG:4326"
-        });
-    }
-
-    return { features: features };
-}
-
-export interface FeatureResponse {
-    features: FeatureLike[];
 }
