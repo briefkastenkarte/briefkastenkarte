@@ -8,11 +8,10 @@ import { OverpassApiVectorSourceOptions } from "./api";
 import { HttpService } from "@open-pioneer/http";
 import { FeatureLoader } from "ol/featureloader";
 import OSMXML from "ol/format/OSMXML";
-import { transformExtent } from "ol/proj";
+import { Projection, ProjectionLike, transformExtent } from "ol/proj";
 import FeatureFormat from "ol/format/Feature";
 import { FeatureLike } from "ol/Feature";
 import { createRequestUrl, loadFeatures, queryFeatures } from "./requestUtils";
-import { Extent } from "ol/extent";
 
 const LOG = createLogger("overpass-api:OverpassApiSourceFactory");
 const DEFAULT_TIMEOUT = 25;
@@ -51,7 +50,8 @@ export function _createVectorSource(
     options: OverpassApiVectorSourceOptions,
     internals: InternalOptions
 ): VectorSource {
-    const { additionalOptions, attributions, baseUrl, query, timeout, rewriteUrl } = options;
+    const { additionalOptions, attributions, baseUrl, mapProjection, query, timeout, rewriteUrl } =
+        options;
 
     const httpService = internals.httpService;
 
@@ -86,14 +86,17 @@ export function _createVectorSource(
         success,
         failure
     ): Promise<void> => {
-        const bbox = transformExtent(extent, "EPSG:25832", "EPSG:4326");
-        const newExtent = [bbox[1], bbox[0], bbox[3], bbox[2]] as Extent;
+        const bbox = transformExtent(extent, mapProjection, "EPSG:4326");
+        const minX = bbox[1] as number;
+        const minY = bbox[0] as number;
+        const maxX = bbox[3] as number;
+        const maxY = bbox[2] as number;
 
         const url = createRequestUrl(
             baseUrl,
             timeout ?? DEFAULT_TIMEOUT,
             query,
-            newExtent,
+            [minX, minY, maxX, maxY],
             rewriteUrl
         );
 
@@ -111,6 +114,7 @@ export function _createVectorSource(
                 url: url,
                 httpService: httpService,
                 featureFormat: vectorSrc.getFormat()!,
+                mapProjection,
                 signal: abortController.signal,
                 queryFeatures: queryFeaturesFunc,
                 addFeatures: addFeaturesFunc
@@ -147,6 +151,7 @@ export interface LoadFeatureOptions {
     url: URL;
     httpService: HttpService;
     featureFormat: FeatureFormat;
+    mapProjection: Projection | ProjectionLike;
     signal: AbortSignal;
     queryFeatures: QueryFeaturesFunc;
     addFeatures: AddFeaturesFunc;

@@ -16,7 +16,7 @@ import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
-import { MAP_ID } from "../map/MapConfigProviderImpl";
+import { MAP_ID, MAP_PROJECTION } from "../map/MapConfigProviderImpl";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { DefaultMapProvider } from "@open-pioneer/map";
 import { Circle as CircleStyle, Fill, Stroke, Style } from "ol/style";
@@ -133,7 +133,7 @@ export function AppUI() {
                                     aria-label={intl.formatMessage({ id: "ariaLabel.bottomLeft" })}
                                 >
                                     <CoordinateViewer
-                                        displayProjectionCode="EPSG:25832"
+                                        displayProjectionCode={MAP_PROJECTION}
                                         precision={0}
                                     />
                                 </Box>

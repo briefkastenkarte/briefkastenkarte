@@ -1,14 +1,17 @@
 // SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte-de)
 // SPDX-License-Identifier: Apache-2.0
-import { MapConfig, MapConfigProvider, SimpleLayer, WMTSLayer } from "@open-pioneer/map";
+import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import View from "ol/View";
 import { OverpassApiVectorSourceFactory } from "@briefkastenkarte/overpass-api";
 import { ServiceOptions } from "@open-pioneer/runtime";
 import VectorLayer from "ol/layer/Vector";
 import { Circle, Fill, Style } from "ol/style";
+import TileLayer from "ol/layer/Tile";
+import { OSM } from "ol/source";
 
 export const MAP_ID = "briefkastenkarte";
+export const MAP_PROJECTION = "EPSG:3857";
 
 const DEFAULT_COLOR = "blue";
 interface References {
@@ -27,11 +30,11 @@ export class MapConfigProviderImpl implements MapConfigProvider {
         return {
             advanced: {
                 view: new View({
-                    center: [350500, 5675000],
+                    center: [767539, 6657562],
                     zoom: 14,
                     maxZoom: 19,
                     constrainResolution: true,
-                    projection: "EPSG:25832"
+                    projection: MAP_PROJECTION
                 })
             },
             layers: [
@@ -44,16 +47,13 @@ export class MapConfigProviderImpl implements MapConfigProvider {
 
 function createBaseLayers() {
     return [
-        new WMTSLayer({
+        new SimpleLayer({
+            title: "OpenStreetMap",
+            id: "osm",
             isBaseLayer: true,
-            title: "Karte (grau)",
-            url: "https://sgx.geodatenzentrum.de/wmts_basemapde/1.0.0/WMTSCapabilities.xml",
-            name: "de_basemapde_web_raster_grau",
-            matrixSet: "DE_EPSG_25832_ADV",
-            visible: true,
-            sourceOptions: {
-                attributions: `DL-DE->BY-2.0: &copy; GeoBasis-DE / <a href="https://www.bkg.bund.de/" title="Externer Link: Bundesamt für Kartographie und Geodäsie" aria-label="Externer Link: Bundesamt für Kartographie und Geodäsie" target="_blank">BKG</a> (${new Date().getFullYear()}) <a href="https://www.govdata.de/dl-de/by-2-0" title="Externer Link: GovData.de - Das Datenportal für Deutschland" aria-label="Externer Link: GovData.de - Das Datenportal für Deutschland" target="_blank">dl-de/by-2-0</a>`
-            }
+            olLayer: new TileLayer({
+                source: new OSM()
+            })
         })
     ];
 }
@@ -76,7 +76,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box];",
-                    attributions
+                    attributions,
+                    mapProjection: MAP_PROJECTION
                 })
             })
         }),
@@ -94,7 +95,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box][collection_times~'Su'];",
-                    attributions
+                    attributions,
+                    mapProjection: MAP_PROJECTION
                 })
             })
         }),
@@ -112,7 +114,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box][collection_times!~'.'];",
-                    attributions
+                    attributions,
+                    mapProjection: MAP_PROJECTION
                 })
             })
         }),
@@ -130,7 +133,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box]['addr:street'~'.'];",
-                    attributions
+                    attributions,
+                    mapProjection: MAP_PROJECTION
                 })
             })
         }),
@@ -148,7 +152,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_office];",
-                    attributions
+                    attributions,
+                    mapProjection: MAP_PROJECTION
                 })
             })
         }),
@@ -166,7 +171,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=parcel_locker];",
-                    attributions
+                    attributions,
+                    mapProjection: MAP_PROJECTION
                 })
             })
         })

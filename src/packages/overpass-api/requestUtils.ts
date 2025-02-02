@@ -6,6 +6,7 @@ import { LoadFeatureOptions } from "./createVectorSource";
 import { FeatureLike } from "ol/Feature";
 import { HttpService } from "@open-pioneer/http";
 import FeatureFormat from "ol/format/Feature";
+import { Projection, ProjectionLike } from "ol/proj";
 
 /**
  * @internal
@@ -28,9 +29,16 @@ export function createRequestUrl(
  * Fetches features.
  */
 export async function loadFeatures(options: LoadFeatureOptions): Promise<FeatureResponse> {
-    const { url, httpService, featureFormat, signal, queryFeatures, addFeatures } = options;
+    const { url, httpService, featureFormat, signal, mapProjection, queryFeatures, addFeatures } =
+        options;
 
-    const featureResponse = await queryFeatures(url, httpService, featureFormat, signal);
+    const featureResponse = await queryFeatures(
+        url,
+        httpService,
+        featureFormat,
+        mapProjection,
+        signal
+    );
     const features = featureResponse.features as FeatureLike[];
     addFeatures(features);
     return featureResponse;
@@ -43,6 +51,7 @@ export async function queryFeatures(
     url: URL,
     httpService: HttpService,
     featureFormat: FeatureFormat,
+    mapProjection: Projection | ProjectionLike,
     signal?: AbortSignal
 ): Promise<FeatureResponse> {
     let features: FeatureLike[] = [];
@@ -56,7 +65,7 @@ export async function queryFeatures(
     const xml = await response.text();
     if (featureFormat) {
         features = featureFormat.readFeatures(xml, {
-            featureProjection: "EPSG:25832",
+            featureProjection: mapProjection,
             dataProjection: "EPSG:4326"
         });
     }

@@ -19,7 +19,12 @@ it("expect additionalOptions are set on vector-source", () => {
     };
 
     const vectorSource = _createVectorSource(
-        { baseUrl: "", query: "", additionalOptions: additionalOptions },
+        {
+            baseUrl: "",
+            query: "",
+            additionalOptions: additionalOptions,
+            mapProjection: "EPSG:3857"
+        },
         {
             httpService: DUMMY_HTTP_SERVICE
         }
