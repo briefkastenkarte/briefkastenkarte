@@ -8,10 +8,11 @@ import { OverpassApiVectorSourceOptions } from "./api";
 import { HttpService } from "@open-pioneer/http";
 import { FeatureLoader } from "ol/featureloader";
 import OSMXML from "ol/format/OSMXML";
-import { Projection, ProjectionLike, transformExtent } from "ol/proj";
+import { Projection, ProjectionLike, transformExtent as olTransformExtent } from "ol/proj";
 import FeatureFormat from "ol/format/Feature";
 import { FeatureLike } from "ol/Feature";
 import { createRequestUrl, loadFeatures, queryFeatures } from "./requestUtils";
+import { Extent } from "ol/extent";
 
 const LOG = createLogger("overpass-api:OverpassApiSourceFactory");
 const DEFAULT_TIMEOUT = 25;
@@ -86,19 +87,8 @@ export function _createVectorSource(
         success,
         failure
     ): Promise<void> => {
-        const bbox = transformExtent(extent, mapProjection, "EPSG:4326");
-        const minX = bbox[1] as number;
-        const minY = bbox[0] as number;
-        const maxX = bbox[3] as number;
-        const maxY = bbox[2] as number;
-
-        const url = createRequestUrl(
-            baseUrl,
-            timeout ?? DEFAULT_TIMEOUT,
-            query,
-            [minX, minY, maxX, maxY],
-            rewriteUrl
-        );
+        const bbox = transformExtent(extent, mapProjection);
+        const url = createRequestUrl(baseUrl, timeout ?? DEFAULT_TIMEOUT, query, bbox, rewriteUrl);
 
         /**
          * An extent-change should cancel open requests for older extents, because otherwise,
@@ -155,4 +145,24 @@ export interface LoadFeatureOptions {
     signal: AbortSignal;
     queryFeatures: QueryFeaturesFunc;
     addFeatures: AddFeaturesFunc;
+}
+
+/**
+ * @internal
+ * Transform extent to `EPSG:4326` with correct
+ * coordinates order for OpenLayers `[lon,lat]`.
+ *
+ * @see
+ * Why is the order of a coordinate [lon,lat],
+ * and not [lat,lon] from https://openlayers.org/doc/faq.html.
+ */
+export function transformExtent(extent: Extent, sourceProjection: ProjectionLike) {
+    const bbox = olTransformExtent(extent, sourceProjection, "EPSG:4326");
+
+    const minX = bbox[1] as number;
+    const minY = bbox[0] as number;
+    const maxX = bbox[3] as number;
+    const maxY = bbox[2] as number;
+
+    return [minX, minY, maxX, maxY];
 }
