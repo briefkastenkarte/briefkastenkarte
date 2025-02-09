@@ -8,7 +8,7 @@ import { OverpassApiVectorSourceOptions } from "./api";
 import { HttpService } from "@open-pioneer/http";
 import { FeatureLoader } from "ol/featureloader";
 import OSMXML from "ol/format/OSMXML";
-import { Projection, ProjectionLike, transformExtent as olTransformExtent } from "ol/proj";
+import { ProjectionLike, transformExtent as olTransformExtent } from "ol/proj";
 import FeatureFormat from "ol/format/Feature";
 import { FeatureLike } from "ol/Feature";
 import { createRequestUrl, loadFeatures, queryFeatures } from "./requestUtils";
@@ -141,7 +141,7 @@ export interface LoadFeatureOptions {
     url: URL;
     httpService: HttpService;
     featureFormat: FeatureFormat;
-    mapProjection: Projection | ProjectionLike;
+    mapProjection: ProjectionLike;
     signal: AbortSignal;
     queryFeatures: QueryFeaturesFunc;
     addFeatures: AddFeaturesFunc;

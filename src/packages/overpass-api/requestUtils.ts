@@ -6,7 +6,7 @@ import { LoadFeatureOptions } from "./createVectorSource";
 import { FeatureLike } from "ol/Feature";
 import { HttpService } from "@open-pioneer/http";
 import FeatureFormat from "ol/format/Feature";
-import { Projection, ProjectionLike } from "ol/proj";
+import { ProjectionLike } from "ol/proj";
 
 /**
  * @internal
@@ -21,6 +21,7 @@ export function createRequestUrl(
 ): URL {
     const url = `${baseUrl}/?data=[bbox:${extent.join(",")}][out:xml][timeout:${timeout}];(${query});out;>;out skel qt;`;
     const urlObj = new URL(url);
+
     return rewriteUrl?.(new URL(urlObj)) ?? urlObj;
 }
 
@@ -39,8 +40,10 @@ export async function loadFeatures(options: LoadFeatureOptions): Promise<Feature
         mapProjection,
         signal
     );
+
     const features = featureResponse.features as FeatureLike[];
     addFeatures(features);
+
     return featureResponse;
 }
 
@@ -51,7 +54,7 @@ export async function queryFeatures(
     url: URL,
     httpService: HttpService,
     featureFormat: FeatureFormat,
-    mapProjection: Projection | ProjectionLike,
+    mapProjection: ProjectionLike,
     signal?: AbortSignal
 ): Promise<FeatureResponse> {
     let features: FeatureLike[] = [];
@@ -63,6 +66,7 @@ export async function queryFeatures(
         throw new Error(`Failed to query features from service (status code ${response.status})`);
     }
     const xml = await response.text();
+
     if (featureFormat) {
         features = featureFormat.readFeatures(xml, {
             featureProjection: mapProjection,
