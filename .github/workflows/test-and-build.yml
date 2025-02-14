@@ -4,42 +4,39 @@ on:
   push:
   pull_request:
 jobs:
-  test-and-build:
+  checks:
+    # Don't run for pull requests from this repository to avoid duplicate builds (push also triggers build).
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    name: "Run quality checks"
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint code
-        run: pnpm lint
+      - name: Install
+        uses: ./.github/workflows/actions/install
 
       - name: Run tests
-        run: pnpm vitest run
+        run: pnpm ci:test
 
-      - name: Check types
-        run: pnpm check-types
+  build_site:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    name: "Build samples and documentation"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Build app
+      - name: Install
+        uses: ./.github/workflows/actions/install
+
+      - name: Build samples
         run: pnpm build
 
       - name: Build API documentation
+        if: github.ref == 'refs/heads/main'
         run: pnpm build-docs
 
       - name: Create license report
@@ -50,3 +47,62 @@ jobs:
         with:
           name: build
           path: dist/
+          retention-days: ${{ github.ref == 'refs/heads/main' && 7 || 1 }}
+
+  build_packages:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    name: "Build packages"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install
+        uses: ./.github/workflows/actions/install
+
+      - name: Build packages
+        run: pnpm build-packages
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    name: "Deploy site"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - checks
+      - build_site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Load artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: dist/
+
+      - name: Assemble site
+        run: |
+          set -eux;
+
+          mkdir -p site;
+          touch site/.nojekyll;
+          mv dist/www/* site/;
+          mv dist/docs site/docs;
+
+      - name: Setup git
+        shell: bash
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: "briefkastenkarte-de/briefkastenkarte-de.github.io"
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          git-config-name: "github-actions[bot]"
+          git-config-email: "41898282+github-actions[bot]@users.noreply.github.com"
+          folder: site
+          target-folder: briefkastenkarte
