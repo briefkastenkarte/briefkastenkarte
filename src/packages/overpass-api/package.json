@@ -19,6 +19,7 @@
         "build": "build-pioneer-package"
     },
     "dependencies": {
+        "@open-pioneer/core": "catalog:",
         "@open-pioneer/http": "catalog:",
         "ol": "catalog:"
     },
