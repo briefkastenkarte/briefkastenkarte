@@ -1,3 +1,6 @@
+[![Build and deploy](https://github.com/briefkastenkarte-de/briefkastenkarte/actions/workflows/test-and-build.yml/badge.svg?branch=main)](https://github.com/briefkastenkarte-de/briefkastenkarte/actions/workflows/test-and-build.yml)
+[![Audit dependencies (daily)](https://github.com/briefkastenkarte-de/briefkastenkarte/actions/workflows/audit-dependencies.yml/badge.svg?branch=main)](https://github.com/briefkastenkarte-de/briefkastenkarte/actions/workflows/audit-dependencies.yml)
+
 # briefkastenkarte
 
 Visualizing mailbox locations based on data retrieved from OpenStreetMap.
