@@ -64,6 +64,16 @@ jobs:
       - name: Build packages
         run: pnpm build-packages
 
+  call_version:
+    if: github.ref == 'refs/heads/main'
+    name: "Publish or create version PR"
+    uses: "./.github/workflows/version.yml"
+    needs:
+      - checks
+      - build_packages
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
   deploy:
     if: github.ref == 'refs/heads/main'
     name: "Deploy site"
