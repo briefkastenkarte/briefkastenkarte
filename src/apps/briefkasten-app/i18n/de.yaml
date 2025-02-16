@@ -5,8 +5,11 @@ messages:
     topLeft: "Kartenwerkzeuge"
     topRight: "Filter nach Standort-Typen, etc."
     bottomLeft: "Koordinatenanzeige"
-    bottomLeft2: "Auswahl der Hintergrundkarte"
   basemapLabel: "Hintergrundkarte auswählen:"
   filterLabel: "Suchfilter"
   cancel: "Abbrechen"
   close: "Schließen"
+
+overrides:
+  "@open-pioneer/toc":
+    operationalLayerLabel: "Standort Typen auswählen"

@@ -15,7 +15,6 @@ __versions:
 catalog:
   # Trails OpenLayers base packages
   # https://github.com/open-pioneer/trails-openlayers-base-packages
-  "@open-pioneer/basemap-switcher": *ol_base_packages_version
   "@open-pioneer/coordinate-viewer": *ol_base_packages_version
   "@open-pioneer/geolocation": *ol_base_packages_version
   "@open-pioneer/map-navigation": *ol_base_packages_version
@@ -23,6 +22,7 @@ catalog:
   "@open-pioneer/map": *ol_base_packages_version
   "@open-pioneer/search": *ol_base_packages_version
   "@open-pioneer/theme": *ol_base_packages_version
+  "@open-pioneer/toc": *ol_base_packages_version
 
   # Trails core packages
   # https://github.com/open-pioneer/trails-core-packages

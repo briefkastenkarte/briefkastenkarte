@@ -4,13 +4,16 @@
 import { defineBuildConfig } from "@open-pioneer/build-support";
 
 export default defineBuildConfig({
-    entryPoints: [],
+    entryPoints: ["index"],
     services: {
-        GreeterImpl: {
-            provides: "sample-package.Greeter"
+        VectorSourceFactory: {
+            provides: "overpass-api.VectorSourceFactory",
+            references: {
+                httpService: "http.HttpService"
+            }
         }
     },
     publishConfig: {
-        strict: false
+        strict: true
     }
 });

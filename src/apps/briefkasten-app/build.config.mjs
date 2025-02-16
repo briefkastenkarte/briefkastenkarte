@@ -8,7 +8,10 @@ export default defineBuildConfig({
     i18n: ["en", "de"],
     services: {
         MapConfigProviderImpl: {
-            provides: ["map.MapConfigProvider"]
+            provides: ["map.MapConfigProvider"],
+            references: {
+                vectorSourceFactory: "overpass-api.VectorSourceFactory"
+            }
         },
         AppModel: {
             provides: "briefkasten-app.AppModel",
