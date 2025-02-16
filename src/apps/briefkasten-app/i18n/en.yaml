@@ -5,7 +5,6 @@ messages:
     topLeft: "Maptools"
     topRight: "Filter by location type, etc."
     bottomLeft: "Coordinate viewer"
-    bottomLeft2: "Basemap switcher"
   basemapLabel: "Select basemap:"
   filterLabel: "Searchfilter"
   cancel: "Cancel"

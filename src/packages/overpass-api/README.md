@@ -33,7 +33,7 @@ const vectorLayer = new VectorLayer({
     source: vectorSourceFactory.createVectorSource({
         baseUrl = "https://overpass-api.de/api/interpreter",
         query: "node[amenity=post_box];",
-        attributions: `<a href="https://www.openstreetmap.org/copyright/" title="Externer Link: OpenStreetMap" aria-label="Externer Link: OpenStreetMap" target="_blank">© OpenStreetMap contributors</a>`,
+        attributions: `<a href="https://www.openstreetmap.org/copyright/" title="Link: OpenStreetMap" aria-label="Link: OpenStreetMap" target="_blank">© OpenStreetMap contributors</a>`,
         mapProjection: "EPSG:3857"
     })
 });

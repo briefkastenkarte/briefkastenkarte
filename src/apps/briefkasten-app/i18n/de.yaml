@@ -5,7 +5,6 @@ messages:
     topLeft: "Kartenwerkzeuge"
     topRight: "Filter nach Standort-Typen, etc."
     bottomLeft: "Koordinatenanzeige"
-    bottomLeft2: "Auswahl der Hintergrundkarte"
   basemapLabel: "Hintergrundkarte auswählen:"
   filterLabel: "Suchfilter"
   cancel: "Abbrechen"

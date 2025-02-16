@@ -14,6 +14,7 @@ export const MAP_ID = "briefkastenkarte";
 export const MAP_PROJECTION = "EPSG:3857";
 
 const DEFAULT_COLOR = "blue";
+
 interface References {
     vectorSourceFactory: OverpassApiVectorSourceFactory;
 }
@@ -60,7 +61,8 @@ function createBaseLayers() {
 
 function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactory) {
     const baseUrl = "https://overpass-api.de/api/interpreter";
-    const attributions = `<a href="https://www.openstreetmap.org/copyright/" title="Externer Link: OpenStreetMap" aria-label="Externer Link: OpenStreetMap" target="_blank">© OpenStreetMap contributors</a>`;
+    const attributions = `<a href="https://www.openstreetmap.org/copyright/" title="Link: OpenStreetMap" aria-label="Link: OpenStreetMap" target="_blank">© OpenStreetMap contributors</a>`;
+
     return [
         new SimpleLayer({
             id: "overpass-api-amenity_post_box",

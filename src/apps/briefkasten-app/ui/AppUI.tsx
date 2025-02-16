@@ -1,14 +1,7 @@
 // SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte-de)
 // SPDX-License-Identifier: Apache-2.0
-import {
-    Box,
-    Container,
-    Flex,
-    FormControl,
-    FormLabel,
-    Text
-} from "@open-pioneer/chakra-integration";
+import { Box, Container, Flex } from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer } from "@open-pioneer/map";
 import { ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -17,7 +10,6 @@ import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { MAP_ID, MAP_PROJECTION } from "../map/MapConfigProviderImpl";
-import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { DefaultMapProvider } from "@open-pioneer/map";
 import { Circle as CircleStyle, Fill, Stroke, Style } from "ol/style";
 import { SearchComponent } from "./SearchComponent";
@@ -102,27 +94,6 @@ export function AppUI() {
                                 >
                                     <FilterComponent />
                                 </Flex>
-                            </MapAnchor>
-                            <MapAnchor position="bottom-left" horizontalGap={5} verticalGap={30}>
-                                <Box
-                                    backgroundColor="white"
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    padding={2}
-                                    boxShadow="lg"
-                                    role="bottom-left"
-                                    maxWidth={250}
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.bottomLeft2" })}
-                                >
-                                    <FormControl>
-                                        <FormLabel>
-                                            <Text as="b">
-                                                {intl.formatMessage({ id: "basemapLabel" })}
-                                            </Text>
-                                        </FormLabel>
-                                        <BasemapSwitcher allowSelectingEmptyBasemap />
-                                    </FormControl>
-                                </Box>
                             </MapAnchor>
                             <MapAnchor position="bottom-left" horizontalGap={0} verticalGap={0}>
                                 <Box
