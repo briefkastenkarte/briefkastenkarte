@@ -1,10 +1,10 @@
 # @briefkastenkarte/overpass-api
 
-This package provides utilities to work with Overpass API services.
+This package provides utilities to work with Overpass API services for [Open Pioneer](https://github.com/open-pioneer/) projects.
 
 ## Usage
 
-This vector source should be used together with a vector layer.
+This vector source should be used together with an [OpenLayers vector layer](https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html).
 
 Inject the vector source factory by referencing `"overpass-api.VectorSourceFactory"`:
 

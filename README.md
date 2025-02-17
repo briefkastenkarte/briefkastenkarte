@@ -3,7 +3,9 @@
 
 # briefkastenkarte
 
-Visualizing mailbox locations based on data retrieved from OpenStreetMap.
+Visualizing mailbox locations based on data retrieved from [OpenStreetMap](https://www.openstreetmap.org/).
+
+[CI/CD environment](https://briefkastenkarte-de.github.io/briefkastenkarte/) | [API documentation](https://briefkastenkarte-de.github.io/briefkastenkarte/docs/)
 
 ## Quick start
 
@@ -24,6 +26,7 @@ Point your browser at it and start programming!
 ## See also
 
 -   [Open Pioneer](https://github.com/open-pioneer/)
+-   [Briefkastenkarte API documentation](https://briefkastenkarte-de.github.io/briefkastenkarte/docs/)
 
 ## License
 
