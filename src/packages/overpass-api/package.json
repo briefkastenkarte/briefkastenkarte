@@ -1,6 +1,6 @@
 {
     "name": "@briefkastenkarte/overpass-api",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "This package provides utilities to work with Overpass API services for Open Pioneer projects.",
     "license": "Apache-2.0",
     "main": "index.ts",
