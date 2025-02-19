@@ -62,6 +62,7 @@ function createBaseLayers() {
 function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactory) {
     const baseUrl = "https://overpass-api.de/api/interpreter";
     const attributions = `<a href="https://www.openstreetmap.org/copyright/" title="Link: OpenStreetMap" aria-label="Link: OpenStreetMap" target="_blank">© OpenStreetMap contributors</a>`;
+    const minZoom = 13;
 
     return [
         new SimpleLayer({
@@ -75,6 +76,7 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                         radius: 5
                     })
                 }),
+                minZoom,
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box];",
@@ -94,6 +96,7 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                         radius: 5
                     })
                 }),
+                minZoom,
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box][collection_times~'Su'];",
@@ -113,6 +116,7 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                         radius: 5
                     })
                 }),
+                minZoom,
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box][collection_times!~'.'];",
@@ -132,6 +136,7 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                         radius: 5
                     })
                 }),
+                minZoom,
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box]['addr:street'~'.'];",
@@ -151,6 +156,7 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                         radius: 5
                     })
                 }),
+                minZoom,
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_office];",
@@ -170,6 +176,7 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                         radius: 5
                     })
                 }),
+                minZoom,
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=parcel_locker];",
