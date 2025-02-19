@@ -51,15 +51,13 @@ export function _createVectorSource(
     options: OverpassApiVectorSourceOptions,
     internals: InternalOptions
 ): VectorSource {
-    const { additionalOptions, attributions, baseUrl, mapProjection, query, timeout, rewriteUrl } =
-        options;
+    const { additionalOptions, baseUrl, mapProjection, query, timeout, rewriteUrl } = options;
 
     const httpService = internals.httpService;
 
     const vectorSrc = new VectorSource({
         format: new OSMXML(),
         strategy: bbox,
-        attributions: attributions,
         ...additionalOptions
     });
 
