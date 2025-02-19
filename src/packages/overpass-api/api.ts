@@ -5,7 +5,6 @@ import { DeclaredService } from "@open-pioneer/runtime";
 import { Feature } from "ol";
 import { Geometry } from "ol/geom";
 import { ProjectionLike } from "ol/proj";
-import { AttributionLike } from "ol/source/Source";
 import VectorSource, { Options } from "ol/source/Vector";
 
 /**
@@ -32,11 +31,6 @@ export interface OverpassApiVectorSourceOptions {
      * Current map projection (e.g. `EPSG:3857`)
      */
     mapProjection: ProjectionLike;
-
-    /**
-     * Optional attribution for the layer (e.g. copyright hints).
-     */
-    attributions?: AttributionLike | undefined;
 
     /**
      * Optional additional options for the VectorSource.

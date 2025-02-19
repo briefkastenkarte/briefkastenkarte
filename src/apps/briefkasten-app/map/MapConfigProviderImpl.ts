@@ -80,8 +80,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box];",
-                    attributions,
-                    mapProjection: MAP_PROJECTION
+                    mapProjection: MAP_PROJECTION,
+                    additionalOptions: { attributions }
                 })
             })
         }),
@@ -100,8 +100,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box][collection_times~'Su'];",
-                    attributions,
-                    mapProjection: MAP_PROJECTION
+                    mapProjection: MAP_PROJECTION,
+                    additionalOptions: { attributions }
                 })
             })
         }),
@@ -120,8 +120,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box][collection_times!~'.'];",
-                    attributions,
-                    mapProjection: MAP_PROJECTION
+                    mapProjection: MAP_PROJECTION,
+                    additionalOptions: { attributions }
                 })
             })
         }),
@@ -140,8 +140,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_box]['addr:street'~'.'];",
-                    attributions,
-                    mapProjection: MAP_PROJECTION
+                    mapProjection: MAP_PROJECTION,
+                    additionalOptions: { attributions }
                 })
             })
         }),
@@ -160,8 +160,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=post_office];",
-                    attributions,
-                    mapProjection: MAP_PROJECTION
+                    mapProjection: MAP_PROJECTION,
+                    additionalOptions: { attributions }
                 })
             })
         }),
@@ -180,8 +180,8 @@ function createOverpassLayers(vectorSourceFactory: OverpassApiVectorSourceFactor
                 source: vectorSourceFactory.createVectorSource({
                     baseUrl,
                     query: "node[amenity=parcel_locker];",
-                    attributions,
-                    mapProjection: MAP_PROJECTION
+                    mapProjection: MAP_PROJECTION,
+                    additionalOptions: { attributions }
                 })
             })
         })
