@@ -41,6 +41,7 @@
             "nanoid: https://github.com/advisories/GHSA-mwcw-c2x4-8c55",
             "dompurify: CVE-2025-26791",
             "esbuild: https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+            "@babel/runtime: https://github.com/advisories/GHSA-968p-4wvh-cqc8",
             "",
             "ignored cves",
             "============",
