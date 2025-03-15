@@ -1,16 +1,18 @@
 // SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte-de)
 // SPDX-License-Identifier: Apache-2.0
-/* eslint-disable @typescript-eslint/no-require-imports */
-const { sync: fastGlobSync } = require("fast-glob");
-const { dirname } = require("path");
-const DEFAULT_HIGHLIGHT_LANGS = require("typedoc").OptionDefaults.highlightLanguages;
+import { readFileSync } from "fs";
+import fastGlob from "fast-glob";
+import { dirname } from "path";
+import { OptionDefaults } from "typedoc";
+
+const DEFAULT_HIGHLIGHT_LANGS = OptionDefaults.highlightLanguages;
 
 const documentedPackages = getPackageDirectories().sort();
 console.info("Creating documentation for packages:", documentedPackages);
 
 // See https://typedoc.org/options/
-module.exports = {
+export default {
     name: "Briefkastenkarte Packages",
     readme: "none",
     out: "dist/docs",
@@ -30,8 +32,8 @@ module.exports = {
 // Returns a list of package directories to be documented.
 // Each directory must contain a package.json file.
 function getPackageDirectories() {
-    const packageJsonPaths = fastGlobSync("./src/packages/**/package.json", {
-        ignore: ["**/dist/**", "**/node_modules/**"],
+    const packageJsonPaths = fastGlob.sync("./src/packages/**/package.json", {
+        ignore: ["**/dist/**", "**/node_modules/**", "**/test-data/**"],
         followSymbolicLinks: false
     });
     const packageDirectories = packageJsonPaths
