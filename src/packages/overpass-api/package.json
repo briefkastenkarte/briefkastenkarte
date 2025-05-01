@@ -6,10 +6,10 @@
     "main": "index.ts",
     "repository": {
         "type": "git",
-        "url": "hhttps://github.com/briefkastenkarte-de/briefkastenkarte",
+        "url": "hhttps://github.com/briefkastenkarte/briefkastenkarte",
         "directory": "src/packages/overpass-api"
     },
-    "homepage": "https://github.com/briefkastenkarte-de/briefkastenkarte",
+    "homepage": "https://github.com/briefkastenkarte/briefkastenkarte",
     "keywords": [
         "briefkastenkarte",
         "overpass",
