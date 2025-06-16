@@ -42,6 +42,7 @@
             "dompurify: CVE-2025-26791",
             "esbuild: https://github.com/advisories/GHSA-67mh-4wv8-2f99",
             "@babel/runtime: https://github.com/advisories/GHSA-968p-4wvh-cqc8",
+            "brace-expansion: https://github.com/advisories/GHSA-v6h2-p8h4-qcjw",
             "",
             "ignored cves",
             "============",
@@ -66,7 +67,8 @@
             "nanoid@<3.3.8": "^3.3.8",
             "dompurify@<3.2.4": ">=3.2.4",
             "esbuild@<0.25.0": ">=0.25.0",
-            "@babel/runtime": ">=7.26.10"
+            "@babel/runtime": ">=7.26.10",
+            "brace-expansion": ">=2.0.2"
         },
         "auditConfig": {
             "ignoreCves": []
