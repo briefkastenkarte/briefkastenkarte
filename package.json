@@ -44,6 +44,7 @@
             "@babel/runtime: https://github.com/advisories/GHSA-968p-4wvh-cqc8",
             "brace-expansion: https://github.com/advisories/GHSA-v6h2-p8h4-qcjw",
             "form-data: https://github.com/advisories/GHSA-fjxv-7rqg-78g4",
+            "tmp: https://github.com/advisories/GHSA-52f5-9888-hmc6",
             "",
             "ignored cves",
             "============",
@@ -70,7 +71,8 @@
             "esbuild@<0.25.0": ">=0.25.0",
             "@babel/runtime": ">=7.26.10",
             "brace-expansion": ">=2.0.2",
-            "form-data": ">=4.0.4"
+            "form-data": ">=4.0.4",
+            "tmp": ">=0.2.4"
         },
         "auditConfig": {
             "ignoreCves": []
