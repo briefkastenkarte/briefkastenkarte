@@ -212,10 +212,10 @@ overrides:
 
 patchedDependencies:
   '@chakra-ui/hooks':
-    hash: mayfbuoknaogevz43ogq74es4q
+    hash: 0425e59e5963f540970162a0320f192637dd4f5e74c54014680d4dd4f2e5c16b
     path: patches/@chakra-ui__hooks.patch
   react-select:
-    hash: benwgmj73vuqed6j4bcic264ha
+    hash: 76074e6c05936addacb06b7e4bf08d0f5101ba64a00cae84d8c9ed60c62254de
     path: patches/react-select@5.8.0.patch
 
 importers:
@@ -4303,7 +4303,7 @@ snapshots:
 
   '@chakra-ui/anatomy@2.3.6': {}
 
-  '@chakra-ui/hooks@2.4.4(patch_hash=mayfbuoknaogevz43ogq74es4q)(react@19.0.0)':
+  '@chakra-ui/hooks@2.4.4(patch_hash=0425e59e5963f540970162a0320f192637dd4f5e74c54014680d4dd4f2e5c16b)(react@19.0.0)':
     dependencies:
       '@chakra-ui/utils': 2.2.4(react@19.0.0)
       '@zag-js/element-size': 0.31.1
@@ -4318,7 +4318,7 @@ snapshots:
 
   '@chakra-ui/react@2.10.6(@emotion/react@11.14.0(@types/react@19.0.10)(react@19.0.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@19.0.10)(react@19.0.0))(@types/react@19.0.10)(react@19.0.0))(@types/react@19.0.10)(framer-motion@12.4.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@chakra-ui/hooks': 2.4.4(patch_hash=mayfbuoknaogevz43ogq74es4q)(react@19.0.0)
+      '@chakra-ui/hooks': 2.4.4(patch_hash=0425e59e5963f540970162a0320f192637dd4f5e74c54014680d4dd4f2e5c16b)(react@19.0.0)
       '@chakra-ui/styled-system': 2.12.2(react@19.0.0)
       '@chakra-ui/theme': 3.4.8(@chakra-ui/styled-system@2.12.2(react@19.0.0))(react@19.0.0)
       '@chakra-ui/utils': 2.2.4(react@19.0.0)
@@ -5969,7 +5969,7 @@ snapshots:
       '@emotion/react': 11.14.0(@types/react@19.0.10)(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
-      react-select: 5.10.0(patch_hash=benwgmj73vuqed6j4bcic264ha)(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-select: 5.10.0(patch_hash=76074e6c05936addacb06b7e4bf08d0f5101ba64a00cae84d8c9ed60c62254de)(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
@@ -7660,7 +7660,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.10
 
-  react-select@5.10.0(patch_hash=benwgmj73vuqed6j4bcic264ha)(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-select@5.10.0(patch_hash=76074e6c05936addacb06b7e4bf08d0f5101ba64a00cae84d8c9ed60c62254de)(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@babel/runtime': 7.26.10
       '@emotion/cache': 11.14.0
