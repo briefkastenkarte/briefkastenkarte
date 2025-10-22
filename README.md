@@ -9,7 +9,7 @@ Visualizing mailbox locations based on data retrieved from [OpenStreetMap](https
 
 ## Quick start
 
-Ensure that you have [Node](https://nodejs.org/en/) (Version 20 or later) and [pnpm](https://pnpm.io/) (Version 9.x) installed.
+Ensure that you have [Node](https://nodejs.org/en/) (Version 20 or later) and [pnpm](https://pnpm.io/) (Version 10.x) installed.
 
 Then execute the following commands to get started:
 
