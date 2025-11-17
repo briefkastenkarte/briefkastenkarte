@@ -53,7 +53,7 @@ catalog:
   react: *react_version
 
   # Devtools
-  "@changesets/cli": ^2.27.9
+  "@changesets/cli": ^2.29.7
   "@open-pioneer/build-package-cli": ^3.0.0
   "@open-pioneer/build-support": ^3.0.0
   "@open-pioneer/vite-plugin-pioneer": ^4.0.0
