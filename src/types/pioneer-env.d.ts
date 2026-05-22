@@ -3,3 +3,4 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /// <reference types="@open-pioneer/vite-plugin-pioneer/client" />
+void 0; // Workaround for linter issue
