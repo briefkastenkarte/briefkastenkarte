@@ -101,6 +101,7 @@ export function _createVectorSource(
             const features = await loadFeatures({
                 url: url,
                 httpService: httpService,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 featureFormat: vectorSrc.getFormat()!,
                 mapProjection,
                 signal: abortController.signal,

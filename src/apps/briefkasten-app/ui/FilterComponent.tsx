@@ -1,61 +1,39 @@
 // SPDX-FileCopyrightText: 2023-2026 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-FileCopyrightText: 2025-2026 Briefkastenkarte project (https://github.com/briefkastenkarte)
 // SPDX-License-Identifier: Apache-2.0
-import {
-    Button,
-    Drawer,
-    DrawerBody,
-    DrawerCloseButton,
-    DrawerContent,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    useDisclosure
-} from "@open-pioneer/chakra-integration";
+import { CloseButton, Drawer, Portal } from "@chakra-ui/react";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { Toc } from "@open-pioneer/toc";
-import { useRef } from "react";
 import { MdFilterAlt } from "react-icons/md";
 import { useIntl } from "open-pioneer:react-hooks";
 
 export function FilterComponent() {
     const intl = useIntl();
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const btnRef = useRef<HTMLButtonElement>(null);
-
     return (
-        <>
-            <ToolButton
-                label={intl.formatMessage({ id: "filterLabel" })}
-                icon={<MdFilterAlt />}
-                ref={btnRef}
-                onClick={onOpen}
-            ></ToolButton>
-            <Drawer
-                isOpen={isOpen}
-                placement="right"
-                onClose={onClose}
-                finalFocusRef={btnRef}
-                isFullHeight={false}
-                size="md"
-            >
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader>{intl.formatMessage({ id: "filterLabel" })}</DrawerHeader>
-
-                    <DrawerBody>
-                        <Toc showBasemapSwitcher={false}></Toc>
-                    </DrawerBody>
-
-                    <DrawerFooter>
-                        <Button onClick={onClose} w="100%">
-                            {intl.formatMessage({ id: "close" })}
-                        </Button>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-        </>
+        <Drawer.Root closeOnInteractOutside={false}>
+            <Drawer.Trigger asChild>
+                <ToolButton
+                    label={intl.formatMessage({ id: "filterLabel" })}
+                    icon={<MdFilterAlt />}
+                ></ToolButton>
+            </Drawer.Trigger>
+            <Portal>
+                <Drawer.Positioner pointerEvents="none">
+                    <Drawer.Content pointerEvents="auto">
+                        <Drawer.Header>
+                            <Drawer.Title>{intl.formatMessage({ id: "filterLabel" })}</Drawer.Title>
+                        </Drawer.Header>
+                        <Drawer.Body>
+                            <Toc showBasemapSwitcher={false}></Toc>
+                        </Drawer.Body>
+                        <Drawer.Footer />
+                        <Drawer.CloseTrigger asChild>
+                            <CloseButton size="sm" />
+                        </Drawer.CloseTrigger>
+                    </Drawer.Content>
+                </Drawer.Positioner>
+            </Portal>
+        </Drawer.Root>
     );
 }

@@ -55,8 +55,7 @@ export interface OverpassApiVectorSourceOptions {
  *
  * Use the interface name `"overpass-api.VectorSourceFactory"` to obtain an instance of this factory.
  */
-export interface OverpassApiVectorSourceFactory
-    extends DeclaredService<"overpass-api.VectorSourceFactory"> {
+export interface OverpassApiVectorSourceFactory extends DeclaredService<"overpass-api.VectorSourceFactory"> {
     /**
      * Creates a new {@link VectorSource} that loads features from the specified feature service.
      */

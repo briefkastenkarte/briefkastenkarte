@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: 2023-2026 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-FileCopyrightText: 2025-2026 Briefkastenkarte project (https://github.com/briefkastenkarte)
 // SPDX-License-Identifier: Apache-2.0
-import { Box, Container, Flex } from "@open-pioneer/chakra-integration";
-import { MapAnchor, MapContainer } from "@open-pioneer/map";
+import { Box, Container, Flex, Text } from "@chakra-ui/react";
+import { MapAnchor, MapContainer, useMapModel } from "@open-pioneer/map";
 import { ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl } from "open-pioneer:react-hooks";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
@@ -40,77 +40,79 @@ const ACCURACY_STYLE = new Style({
 
 export function AppUI() {
     const intl = useIntl();
+    const { map } = useMapModel(MAP_ID);
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
-            <Notifier position="bottom" />
+            <Notifier />
             <TitledSection
                 title={
                     <Box
-                        role="region"
                         aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
                         textAlign="center"
-                        // py={1}
                     >
                         <SectionHeading size={"md"}>
-                            {/* Open Pioneer Trails - Map Sample */}
+                            <Text srOnly>Birefkastenkarte</Text>
                         </SectionHeading>
                     </Box>
                 }
             >
                 <Flex flex="1" direction="column" position="relative">
-                    <DefaultMapProvider mapId={MAP_ID}>
-                        <MapContainer
-                            role="main"
-                            aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
-                        >
-                            <Container centerContent>
-                                <SearchComponent />
-                            </Container>
+                    {map && (
+                        <DefaultMapProvider map={map}>
+                            <MapContainer
+                                role="main"
+                                aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
+                            >
+                                <Container centerContent>
+                                    <SearchComponent />
+                                </Container>
 
-                            <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                                <Flex
-                                    role="top-left"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
-                                    direction="column"
-                                    gap={1}
-                                    padding={1}
-                                >
-                                    <ZoomIn />
-                                    <ZoomOut />
-                                    <Geolocation
-                                        positionFeatureStyle={POSITION_STYLE}
-                                        accuracyFeatureStyle={ACCURACY_STYLE}
-                                    />
-                                </Flex>
-                            </MapAnchor>
-                            <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                                <Flex
-                                    role="top-left"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
-                                    direction="column"
-                                    gap={1}
-                                    padding={1}
-                                >
-                                    <FilterComponent />
-                                </Flex>
-                            </MapAnchor>
-                            <MapAnchor position="bottom-left" horizontalGap={0} verticalGap={0}>
-                                <Box
-                                    backgroundColor="rgba(255, 255, 255, 0.75)"
-                                    padding={0.5}
-                                    fontSize={"small"}
-                                    role="bottom-left"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.bottomLeft" })}
-                                >
-                                    <CoordinateViewer
-                                        displayProjectionCode={MAP_PROJECTION}
-                                        precision={0}
-                                    />
-                                </Box>
-                            </MapAnchor>
-                        </MapContainer>
-                    </DefaultMapProvider>
+                                <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
+                                    <Flex
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
+                                        direction="column"
+                                        gap={1}
+                                        padding={1}
+                                    >
+                                        <ZoomIn />
+                                        <ZoomOut />
+                                        <Geolocation
+                                            positionFeatureStyle={POSITION_STYLE}
+                                            accuracyFeatureStyle={ACCURACY_STYLE}
+                                        />
+                                    </Flex>
+                                </MapAnchor>
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                    <Flex
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.topRight"
+                                        })}
+                                        direction="column"
+                                        gap={1}
+                                        padding={1}
+                                    >
+                                        <FilterComponent />
+                                    </Flex>
+                                </MapAnchor>
+                                <MapAnchor position="bottom-left" horizontalGap={0} verticalGap={0}>
+                                    <Box
+                                        backgroundColor="rgba(255, 255, 255, 0.75)"
+                                        padding={0.5}
+                                        fontSize={"small"}
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.bottomLeft"
+                                        })}
+                                    >
+                                        <CoordinateViewer
+                                            displayProjectionCode={MAP_PROJECTION}
+                                            precision={0}
+                                        />
+                                    </Box>
+                                </MapAnchor>
+                            </MapContainer>
+                        </DefaultMapProvider>
+                    )}
                 </Flex>
             </TitledSection>
         </Flex>
