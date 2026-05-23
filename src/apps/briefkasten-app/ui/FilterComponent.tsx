@@ -4,7 +4,7 @@
 import { CloseButton, Drawer, Portal } from "@chakra-ui/react";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { Toc } from "@open-pioneer/toc";
-import { MdFilterAlt } from "react-icons/md";
+import { LuFilter } from "react-icons/lu";
 import { useIntl } from "open-pioneer:react-hooks";
 
 export function FilterComponent() {
@@ -15,7 +15,7 @@ export function FilterComponent() {
             <Drawer.Trigger asChild>
                 <ToolButton
                     label={intl.formatMessage({ id: "filterLabel" })}
-                    icon={<MdFilterAlt />}
+                    icon={<LuFilter />}
                 ></ToolButton>
             </Drawer.Trigger>
             <Portal>
