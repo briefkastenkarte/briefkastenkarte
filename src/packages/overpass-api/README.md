@@ -4,8 +4,8 @@ This package provides utilities to work with Overpass API services for [Open Pio
 
 More information about Overpass API see:
 
--   [Overpass API website](http://overpass-api.de/)
--   [Overpass API OpenStreetMap Wiki](https://wiki.openstreetmap.org/wiki/Overpass_API)
+- [Overpass API website](http://overpass-api.de/)
+- [Overpass API OpenStreetMap Wiki](https://wiki.openstreetmap.org/wiki/Overpass_API)
 
 ## Usage
 

@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
-// SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte)
+// SPDX-FileCopyrightText: 2023-2026 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2025-2026 Briefkastenkarte project (https://github.com/briefkastenkarte)
 // SPDX-License-Identifier: Apache-2.0
 import { execSync } from "child_process";
 import glob from "fast-glob";
@@ -10,7 +10,7 @@ import { basename, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 /**
- * Generates a license report from the dependencies of this repository.
+ * Generates a license report from the production dependencies of this repository.
  * Should be invoked via `pnpm build-license-report` (or manually from the project root).
  *
  * The project name is read from the root `package.json` file.
@@ -34,15 +34,24 @@ function main() {
     // Analyze licenses: find license information, handle configured overrides and print errors.
     const { error, items } = analyzeLicenses(reportJson, config);
 
+    // Add `additionalLicenses`
+    const { additionalError, additionalItems } = getAdditionalLicenses(config, items.length);
+    const allItems = items.concat(additionalItems);
+    const allError = error || additionalError;
+
+    allItems.sort((a, b) => {
+        return a.name.localeCompare(b.name, "en-US");
+    });
+
     // Ensure directory exists, then write the report
     mkdirSync(dirname(OUTPUT_HTML_PATH), {
         recursive: true
     });
-    const reportHtml = generateReportHtml(projectName, items);
+    const reportHtml = generateReportHtml(projectName, allItems);
     writeFileSync(OUTPUT_HTML_PATH, reportHtml, "utf-8");
 
     // Signal error if anything went wrong
-    process.exit(error ? 1 : 0);
+    process.exit(allError ? 1 : 0);
 }
 
 /**
@@ -67,7 +76,9 @@ function analyzeLicenses(
 
     const usedOverrides = new Set<OverrideLicenseEntry>();
     const getOverrideEntry = (name: string, version: string) => {
-        const entry = config.overrideLicenses.find((e) => e.name === name && e.version === version);
+        const entry = config.overrideLicenses?.find(
+            (e) => e.name === name && e.version === version
+        );
         if (entry) {
             usedOverrides.add(entry);
         }
@@ -131,8 +142,8 @@ function analyzeLicenses(
             const item: LicenseItem = {
                 id: `dep-${index}-${version}`,
                 name: name,
-                version: version,
                 license: licenses,
+                version: version,
                 licenseText: licenseTexts.join("\n\n"),
                 noticeText: noticeTexts.join("\n\n")
             };
@@ -140,15 +151,13 @@ function analyzeLicenses(
         }
     });
 
-    items.sort((a, b) => {
-        return a!.name.localeCompare(b!.name, "en-US");
-    });
-
-    for (const overrideEntry of config.overrideLicenses) {
-        if (!usedOverrides.has(overrideEntry)) {
-            console.warn(
-                `License override for dependency '${overrideEntry.name}' (version(s): ${overrideEntry.version}) was not used, it should either be updated or removed.`
-            );
+    if (config.overrideLicenses) {
+        for (const overrideEntry of config.overrideLicenses) {
+            if (!usedOverrides.has(overrideEntry)) {
+                console.warn(
+                    `License override for dependency '${overrideEntry.name}' (version(s): ${overrideEntry.version}) was not used, it should either be updated or removed.`
+                );
+            }
         }
     }
 
@@ -156,6 +165,77 @@ function analyzeLicenses(
     return {
         error,
         items
+    };
+}
+
+function getAdditionalLicenses(
+    config: LicenseConfig,
+    itemCount: number
+): {
+    additionalError: boolean;
+    additionalItems: LicenseItem[];
+} {
+    if (!config.additionalLicenses)
+        return {
+            additionalError: false,
+            additionalItems: []
+        };
+
+    const items: LicenseItem[] = [];
+    let unknownLicenses = false;
+    let disallowedLicenses = false;
+    let missingLicenseText = false;
+
+    config.additionalLicenses.forEach((license) => {
+        const name = license.name;
+        const version = license.version;
+        const licenseSpec = license.license;
+
+        if (!licenseSpec || licenseSpec === "Unknown") {
+            unknownLicenses = true;
+            console.warn(
+                `Failed to detect licenses of dependency ${name} at "additionalLicenses" configuration`
+            );
+        } else if (!config.allowedLicenses.includes(licenseSpec)) {
+            disallowedLicenses = true;
+            console.warn(
+                `License '${licenseSpec}' of dependency ${name} is not allowed by configuration.`
+            );
+        }
+
+        const licenseTexts =
+            license.licenseFiles?.map((file) => {
+                if (file.type === "custom" && file.path) {
+                    try {
+                        return readFileSync(resolve(THIS_DIR, file.path), "utf-8");
+                    } catch (e) {
+                        throw new Error(
+                            `Failed to read license file for project ${name} at ${file.path}: ${e}`
+                        );
+                    }
+                } else {
+                    console.warn(
+                        `Failed to detect license text of dependency ${name} in at "additionalLicenses" configuration`
+                    );
+                    missingLicenseText = true;
+                }
+            }) || [];
+        const item: LicenseItem = {
+            id: `dep-${itemCount}-${name}`,
+            name: name,
+            version: version,
+            license: licenseSpec,
+            licenseText: licenseTexts.join("\n\n"),
+            noticeText: ""
+        };
+        itemCount++;
+        items.push(item);
+    });
+
+    const error = unknownLicenses || disallowedLicenses || missingLicenseText;
+    return {
+        additionalError: error,
+        additionalItems: items
     };
 }
 
@@ -194,7 +274,7 @@ interface LicenseItem {
     name: string;
 
     /** Project version */
-    version: string;
+    version?: string;
 
     /** License name(s) */
     license: string;
@@ -400,7 +480,8 @@ function getPnpmLicenseReport(): PnpmLicensesReport {
 
 interface LicenseConfig {
     allowedLicenses: string[];
-    overrideLicenses: OverrideLicenseEntry[];
+    overrideLicenses: OverrideLicenseEntry[] | undefined;
+    additionalLicenses: AdditionalLicensesEntry[] | undefined;
 }
 
 interface OverrideLicenseEntry {
@@ -418,6 +499,20 @@ interface OverrideLicenseEntry {
 
     /** Notice files, relative to dependency dir */
     noticeFiles?: FileSpec[];
+}
+
+interface AdditionalLicensesEntry {
+    /** Project name, does not need to match package name */
+    name: string;
+
+    /** Exact project version(s), optional. */
+    version?: string;
+
+    /** Manual license name */
+    license: string;
+
+    /** License files */
+    licenseFiles: FileSpec[];
 }
 
 interface FileSpec {
@@ -440,7 +535,7 @@ function readLicenseConfig(path: string): LicenseConfig {
 
         const config: LicenseConfig = {
             allowedLicenses: rawConfig.allowedLicenses,
-            overrideLicenses: rawConfig.overrideLicenses.map(
+            overrideLicenses: rawConfig.overrideLicenses?.map(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (rawEntry: any): OverrideLicenseEntry => {
                     const entry: OverrideLicenseEntry = {
@@ -449,6 +544,24 @@ function readLicenseConfig(path: string): LicenseConfig {
                         license: rawEntry.license,
                         licenseFiles: readFileSpecs(rawEntry.licenseFiles),
                         noticeFiles: readFileSpecs(rawEntry.noticeFiles)
+                    };
+                    return entry;
+                }
+            ),
+            additionalLicenses: rawConfig.additionalLicenses?.map(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (rawEntry: any): AdditionalLicensesEntry => {
+                    const entry: AdditionalLicensesEntry = {
+                        name: rawEntry.name,
+                        version: rawEntry.version,
+                        license: rawEntry.license,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        licenseFiles: rawEntry.licenseFiles.map((file: any) => {
+                            return {
+                                type: "custom",
+                                path: file.custom
+                            };
+                        })
                     };
                     return entry;
                 }

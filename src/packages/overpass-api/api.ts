@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
-// SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte)
+// SPDX-FileCopyrightText: 2023-2026 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2025-2026 Briefkastenkarte project (https://github.com/briefkastenkarte)
 // SPDX-License-Identifier: Apache-2.0
 import { DeclaredService } from "@open-pioneer/runtime";
 import { Feature } from "ol";
@@ -55,8 +55,7 @@ export interface OverpassApiVectorSourceOptions {
  *
  * Use the interface name `"overpass-api.VectorSourceFactory"` to obtain an instance of this factory.
  */
-export interface OverpassApiVectorSourceFactory
-    extends DeclaredService<"overpass-api.VectorSourceFactory"> {
+export interface OverpassApiVectorSourceFactory extends DeclaredService<"overpass-api.VectorSourceFactory"> {
     /**
      * Creates a new {@link VectorSource} that loads features from the specified feature service.
      */

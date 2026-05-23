@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
-// SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte)
+// SPDX-FileCopyrightText: 2023-2026 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2025-2026 Briefkastenkarte project (https://github.com/briefkastenkarte)
 // SPDX-License-Identifier: Apache-2.0
 import { createLogger, isAbortError } from "@open-pioneer/core";
 import { bbox } from "ol/loadingstrategy";
@@ -41,6 +41,23 @@ export interface InternalOptions {
     addFeaturesParam?: AddFeaturesFunc | undefined;
 }
 
+/** @internal */
+export interface LoadFeatureOptions {
+    url: URL;
+    httpService: HttpService;
+    featureFormat: FeatureFormat;
+    mapProjection: ProjectionLike;
+    signal: AbortSignal;
+    queryFeatures: QueryFeaturesFunc;
+    addFeatures: AddFeaturesFunc;
+}
+
+/** @internal */
+type QueryFeaturesFunc = typeof queryFeatures;
+
+/** @internal */
+type AddFeaturesFunc = (features: FeatureLike[]) => void;
+
 /**
  * @internal
  * Creates the actual vector source.
@@ -52,7 +69,6 @@ export function _createVectorSource(
     internals: InternalOptions
 ): VectorSource {
     const { additionalOptions, baseUrl, mapProjection, query, timeout, rewriteUrl } = options;
-
     const httpService = internals.httpService;
 
     const vectorSrc = new VectorSource({
@@ -62,65 +78,67 @@ export function _createVectorSource(
     });
 
     const queryFeaturesFunc = internals.queryFeaturesParam ?? queryFeatures;
+    const addFeaturesFunc = internals.addFeaturesParam ?? defaultAddFeatures;
 
-    const addFeaturesFunc =
-        internals.addFeaturesParam ||
-        function (features: FeatureLike[]) {
-            LOG.debug(`Adding ${features.length} features`);
-
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            vectorSrc.addFeatures(features as any);
-        };
+    function defaultAddFeatures(features: FeatureLike[]): void {
+        LOG.debug(`Adding ${features.length} features`);
+        // FeatureLike is intentionally widened to Feature<Geometry> here;
+        // OL's addFeatures signature is narrower than its runtime behaviour.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        vectorSrc.addFeatures(features as any);
+    }
 
     /**
-     * Abort controller for the currently pending request(s).
-     * Used to cancel outdated requests.
+     * Cancelled whenever the map extent changes, so stale requests don't
+     * block rendering for the new viewport.
      */
-    let abortController: AbortController;
+    let pendingRequest: AbortController;
 
     const loaderFunction: FeatureLoader = async (
         extent,
-        _,
-        __,
+        _resolution,
+        _projection,
         success,
         failure
-    ): Promise<void> => {
-        const bbox = transformExtent(extent, mapProjection);
-        const url = createRequestUrl(baseUrl, timeout ?? DEFAULT_TIMEOUT, query, bbox, rewriteUrl);
+    ): Promise<FeatureLike[]> => {
+        pendingRequest?.abort("Extent changed");
+        pendingRequest = new AbortController();
 
-        /**
-         * An extent-change should cancel open requests for older extents, because otherwise,
-         * old and expensive requests could block new requests for a new extent
-         *
-         * => no features are drawn on the current map for a long time.
-         */
-        abortController?.abort("Extent changed");
-        abortController = new AbortController();
+        const overpassBbox = toOverpassBbox(extent, mapProjection);
+        const url = createRequestUrl(
+            baseUrl,
+            timeout ?? DEFAULT_TIMEOUT,
+            query,
+            overpassBbox,
+            rewriteUrl
+        );
 
         try {
             const features = await loadFeatures({
                 url: url,
                 httpService: httpService,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 featureFormat: vectorSrc.getFormat()!,
                 mapProjection,
-                signal: abortController.signal,
+                signal: pendingRequest.signal,
                 queryFeatures: queryFeaturesFunc,
                 addFeatures: addFeaturesFunc
             });
 
-            // Type mismatch FeatureLike <--> Feature<Geometry>
-            // MIGHT be incorrect! We will see.
+            // See defaultAddFeatures for the widening rationale.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             success?.(features as any);
             LOG.debug("Finished loading features for extent:", extent);
+            return features as unknown as FeatureLike[];
         } catch (error) {
-            if (!isAbortError(error)) {
-                LOG.error("Failed to load features", error);
-            } else {
+            if (isAbortError(error)) {
                 LOG.debug("Request aborted", error);
                 vectorSrc.removeLoadedExtent(extent);
                 failure?.();
+            } else {
+                LOG.error("Failed to load features", error);
             }
+            return [];
         }
     };
 
@@ -128,33 +146,19 @@ export function _createVectorSource(
     return vectorSrc;
 }
 
-/** @internal **/
-type QueryFeaturesFunc = typeof queryFeatures;
-
-/** @internal **/
-type AddFeaturesFunc = (features: FeatureLike[]) => void;
-
-/** @internal **/
-export interface LoadFeatureOptions {
-    url: URL;
-    httpService: HttpService;
-    featureFormat: FeatureFormat;
-    mapProjection: ProjectionLike;
-    signal: AbortSignal;
-    queryFeatures: QueryFeaturesFunc;
-    addFeatures: AddFeaturesFunc;
-}
-
 /**
  * @internal
- * Transform extent to `EPSG:4326` with correct
- * coordinates order for OpenLayers `[lon,lat]`.
+ * Reprojects `extent` from the map projection to EPSG:4326 and reorders
+ * the coordinates into Overpass API's [minLat, minLon, maxLat, maxLon] order.
  *
- * @see
- * Why is the order of a coordinate [lon,lat],
- * and not [lat,lon] from https://openlayers.org/doc/faq.html.
+ * OpenLayers uses [lon, lat] internally, so after reprojection the values are:
+ *   [minLon, minLat, maxLon, maxLat]
+ * Overpass expects the opposite axis order:
+ *   [minLat, minLon, maxLat, maxLon]
+ *
+ * @see https://openlayers.org/doc/faq.html (coordinate order)
  */
-export function transformExtent(extent: Extent, sourceProjection: ProjectionLike) {
+export function toOverpassBbox(extent: Extent, sourceProjection: ProjectionLike) {
     const bbox = olTransformExtent(extent, sourceProjection, "EPSG:4326");
 
     const minX = bbox[1] as number;

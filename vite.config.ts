@@ -1,19 +1,15 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
-// SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte)
+// SPDX-FileCopyrightText: 2023-2026 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2025-2026 Briefkastenkarte project (https://github.com/briefkastenkarte)
 // SPDX-License-Identifier: Apache-2.0
 
 /// <reference types="vitest" />
 import { pioneer } from "@open-pioneer/vite-plugin-pioneer";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
-import eslint from "vite-plugin-eslint";
 
-// Minimum browser versions supported by generated JS/CSS
-// See also:
-// - https://vitejs.dev/config/build-options.html#build-target
-// - https://esbuild.github.io/api/#target
-const targets = ["chrome92", "edge92", "firefox91", "safari14"];
+// @ts-expect-error Invalid typings
+import eslint from "vite-plugin-eslint";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -35,9 +31,20 @@ export default defineConfig(({ mode }) => {
         build: {
             outDir: resolve(__dirname, "dist/www"),
             emptyOutDir: true,
-            target: targets
+
+            // Minimum browser versions supported by generated JS/CSS
+            // See also:
+            // - https://vitejs.dev/config/build-options.html#build-target
+            target: "baseline-widely-available"
         },
 
+        optimizeDeps: {
+            // Include services.{js/ts} files as entry points.
+            // This makes it easier for vite's dev server to find dependencies,
+            // and thereby reduces the number of repeated bundler executions on dev server startup.
+            // Adapt the file patterns if your service modules used a different naming scheme.
+            entries: ["**/*.html", "**/services.{ts,js}", "!**/dist/**"]
+        },
         plugins: [
             pioneer({
                 // Whether to include src/index.html in the built output
@@ -54,12 +61,10 @@ export default defineConfig(({ mode }) => {
         ],
 
         // Ignore irrelevant deprecations.
-        // This can be likely be removed with a future version of Vite.
-        // https://github.com/vitejs/vite/issues/18164
         css: {
             preprocessorOptions: {
                 scss: {
-                    silenceDeprecations: ["legacy-js-api", "import"]
+                    silenceDeprecations: ["import"]
                 }
             }
         },

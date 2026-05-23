@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
-// SPDX-FileCopyrightText: 2025 Briefkastenkarte project (https://github.com/briefkastenkarte)
+// SPDX-FileCopyrightText: 2023-2026 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2025-2026 Briefkastenkarte project (https://github.com/briefkastenkarte)
 // SPDX-License-Identifier: Apache-2.0
 import { Resource } from "@open-pioneer/core";
 import { HttpService } from "@open-pioneer/http";
@@ -8,34 +8,17 @@ import { type DECLARE_SERVICE_INTERFACE, Service, ServiceOptions } from "@open-p
 import { SearchSource } from "@open-pioneer/search";
 import { PhotonGeocoder } from "./sources/searchSources";
 import { Geometry } from "ol/geom";
-import { ReadonlyReactiveArray, reactive, reactiveArray } from "@conterra/reactivity-core";
+import { ReadonlyReactiveArray, reactiveArray } from "@conterra/reactivity-core";
 
 /**
  * Reactive state, rendered by the UI.
  */
 export interface AppState {
     /**
-     * The content of the main widget on the left side of the application.
-     */
-    readonly mainContent: readonly MainContentId[];
-
-    /**
      * The sources currently used in the search component.
      */
     readonly searchSources: ReadonlyReactiveArray<SearchSource>;
 }
-
-/**
- * The id of a widget that can be displayed by this app.
- */
-export type MainContentId =
-    | "toc"
-    | "legend"
-    | "printing"
-    | "selection"
-    | "measurement"
-    | "editing-create"
-    | "editing-update";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -46,14 +29,9 @@ interface References {
     mapRegistry: MapRegistry;
 }
 
-function isInteraction(content: MainContentId): boolean {
-    return content === "selection" || content === "measurement" || content.startsWith("editing-");
-}
-
 export class AppModel implements Service, AppState {
     declare [DECLARE_SERVICE_INTERFACE]: "briefkasten-app.AppModel";
 
-    private _mapRegistry: MapRegistry;
     private _httpService: HttpService;
     private _resources: Resource[] = [];
 
@@ -61,11 +39,9 @@ export class AppModel implements Service, AppState {
     private _featureHighlight: Highlight | undefined = undefined;
 
     // Reactive state used by the UI
-    private _mainContent = reactive<MainContentId[]>(["toc"]);
     private _searchSources = reactiveArray<SearchSource>();
 
     constructor({ references }: ServiceOptions<References>) {
-        this._mapRegistry = references.mapRegistry;
         this._httpService = references.httpService;
 
         this.initSearchSources();
@@ -76,51 +52,8 @@ export class AppModel implements Service, AppState {
         this._resources.forEach((r) => r.destroy());
     }
 
-    get mainContent(): readonly MainContentId[] {
-        return this._mainContent.value;
-    }
-
     get searchSources(): ReadonlyReactiveArray<SearchSource> {
         return this._searchSources;
-    }
-
-    /**
-     * Show or hide the given main content element.
-     *
-     * The main area of this application can show multiple "normal" widgets
-     * or exactly one interaction.
-     */
-    toggleMainContent(content: MainContentId) {
-        const current = this._mainContent.value;
-        if (current.includes(content)) {
-            this._mainContent.value = current.filter((c) => c !== content);
-            return;
-        }
-
-        let next;
-        if (isInteraction(content)) {
-            // Hide everything else. This also enforces a single active map interaction.
-            next = [content];
-            this.clearHighlight();
-        } else {
-            next = current.filter((c) => !isInteraction(c));
-            next.push(content);
-        }
-        this._mainContent.value = next;
-    }
-
-    /**
-     * Hides the content element with the given name.
-     */
-    hideContent(name: MainContentId) {
-        this._mainContent.value = this._mainContent.value.filter((c) => c !== name);
-    }
-
-    /**
-     * Resets all currently running interactions.
-     */
-    clearInteractions() {
-        this._mainContent.value = this._mainContent.value.filter((c) => !isInteraction(c));
     }
 
     /**
@@ -131,7 +64,7 @@ export class AppModel implements Service, AppState {
         const viewport: HTMLElement = map.olMap.getViewport();
 
         this.clearHighlight();
-        this._featureHighlight = map.highlightAndZoom(geometries, {
+        this._featureHighlight = map.highlights.addAndZoom(geometries, {
             viewPadding:
                 viewport && viewport.offsetWidth < 1000
                     ? { top: 150, right: 75, bottom: 50, left: 75 }
