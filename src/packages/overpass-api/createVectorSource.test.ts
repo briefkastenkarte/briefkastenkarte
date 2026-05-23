@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2025-2026 Briefkastenkarte project (https://github.com/briefkastenkarte)
 // SPDX-License-Identifier: Apache-2.0
 import { assert, expect, it } from "vitest";
-import { _createVectorSource, transformExtent } from "./createVectorSource";
+import { _createVectorSource, toOverpassBbox } from "./createVectorSource";
 import { HttpService } from "@open-pioneer/http";
 
 const DUMMY_HTTP_SERVICE = {
@@ -37,7 +37,7 @@ it("expect additionalOptions are set on vector-source", () => {
 });
 
 it("expect bounding box is correctly transformed", () => {
-    const bbox = transformExtent(
+    const bbox = toOverpassBbox(
         [761127.8442525809, 6652177.966820163, 773950.1557474191, 6662946.033179837],
         "EPSG:3857"
     );
