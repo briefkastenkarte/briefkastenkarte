@@ -12,6 +12,11 @@ it("create request url containing extent and Overpass API query", () => {
         [51.15685459468058, 6.7701059045906264, 51.256704355192745, 6.949339916232161]
     );
     expect(url).toMatchInlineSnapshot(
-        '"https://overpass-api.de/api/interpreter/?data=[bbox:51.15685459468058,6.7701059045906264,51.256704355192745,6.949339916232161][out:xml][timeout:1000];(node[amenity=post_box];);out;%3E;out%20skel%20qt;"'
+        `
+      {
+        "body": "[bbox:51.15685459468058,6.7701059045906264,51.256704355192745,6.949339916232161][out:xml][timeout:1000];(node[amenity=post_box];);out;>;out skel qt;",
+        "url": "https://overpass-api.de/api/interpreter",
+      }
+    `
     );
 });

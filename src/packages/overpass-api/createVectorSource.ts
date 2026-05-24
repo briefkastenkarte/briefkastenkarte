@@ -43,7 +43,7 @@ export interface InternalOptions {
 
 /** @internal */
 export interface LoadFeatureOptions {
-    url: URL;
+    url: URL | { url: URL; body: string };
     httpService: HttpService;
     featureFormat: FeatureFormat;
     mapProjection: ProjectionLike;
@@ -105,7 +105,7 @@ export function _createVectorSource(
         pendingRequest = new AbortController();
 
         const overpassBbox = toOverpassBbox(extent, mapProjection);
-        const url = createRequestUrl(
+        const requestUrl = createRequestUrl(
             baseUrl,
             timeout ?? DEFAULT_TIMEOUT,
             query,
@@ -115,7 +115,7 @@ export function _createVectorSource(
 
         try {
             const features = await loadFeatures({
-                url: url,
+                url: requestUrl,
                 httpService: httpService,
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 featureFormat: vectorSrc.getFormat()!,
