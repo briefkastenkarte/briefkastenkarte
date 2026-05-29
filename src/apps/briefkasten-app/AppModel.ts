@@ -6,7 +6,7 @@ import { HttpService } from "@open-pioneer/http";
 import { Highlight, MapModel, MapRegistry } from "@open-pioneer/map";
 import { type DECLARE_SERVICE_INTERFACE, Service, ServiceOptions } from "@open-pioneer/runtime";
 import { SearchSource } from "@open-pioneer/search";
-import { PhotonGeocoder } from "./sources/searchSources";
+import { PhotonGeocoder } from "@briefkastenkarte/photon-geocoder-search-source";
 import { Geometry } from "ol/geom";
 import { ReadonlyReactiveArray, reactiveArray } from "@conterra/reactivity-core";
 
@@ -101,11 +101,12 @@ export class AppModel implements Service, AppState {
      * These are used by the UI to configure the search widget.
      */
     private initSearchSources() {
-        const photonSource = new PhotonGeocoder(
-            "Photon Geocoder",
-            ["city", "street"],
-            this._httpService
-        );
+        const photonSource = new PhotonGeocoder({
+            label: "Photon Geocoder",
+            filteredTypes: ["city", "street"],
+            httpService: this._httpService,
+            limit: 5
+        });
         this._searchSources.push(photonSource);
     }
 }

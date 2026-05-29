@@ -1,0 +1,31 @@
+{
+    "name": "@briefkastenkarte/photon-geocoder-search-source",
+    "version": "0.1.1",
+    "description": "This package provides an Open Pioneer search source that queries the Photon Geocoder.",
+    "license": "Apache-2.0",
+    "main": "index.ts",
+    "repository": {
+        "type": "git",
+        "url": "hhttps://github.com/briefkastenkarte/briefkastenkarte",
+        "directory": "src/packages/overpass-api"
+    },
+    "homepage": "https://github.com/briefkastenkarte/briefkastenkarte",
+    "keywords": [
+        "briefkastenkarte",
+        "photon",
+        "osm"
+    ],
+    "scripts": {
+        "build": "build-pioneer-package"
+    },
+    "peerDependencies": {
+        "@open-pioneer/http": "catalog:",
+        "@open-pioneer/search": "catalog:",
+        "ol": "catalog:"
+    },
+    "devDependencies": {},
+    "publishConfig": {
+        "directory": "dist",
+        "linkDirectory": false
+    }
+}

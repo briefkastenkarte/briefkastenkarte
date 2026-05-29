@@ -3,6 +3,7 @@
     "private": true,
     "dependencies": {
         "@briefkastenkarte/overpass-api": "workspace:^",
+        "@briefkastenkarte/photon-geocoder-search-source": "workspace:^",
         "@chakra-ui/react": "catalog:",
         "@open-pioneer/coordinate-viewer": "catalog:",
         "@open-pioneer/geolocation": "catalog:",
