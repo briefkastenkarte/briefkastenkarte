@@ -25,6 +25,15 @@ $ pnpm run dev                                                            # Laun
 Vite will print the project's local address (usually <http://localhost:5173/>).
 Point your browser at it and start programming!
 
+## Packages
+
+This repository publishes the following packages:
+
+| Name                                                                                             | Version                                                                                                                                                                           |
+| ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [@briefkastenkarte/overpass-api](./src/packages/overpass-api/)                                   | [![NPM Version](https://img.shields.io/npm/v/%40briefkastenkarte%2Foverpass-api)](https://www.npmjs.com/package/@briefkastenkarte/overpass-api)                                   |
+| [@briefkastenkarte/photon-geocoder-search-source](./src/packages/photon-geocoder-search-source/) | [![NPM Version](https://img.shields.io/npm/v/%40briefkastenkarte%2Fphoton-geocoder-search-source)](https://www.npmjs.com/package/@briefkastenkarte/photon-geocoder-search-source) |
+
 ## See also
 
 - [Open Pioneer](https://github.com/open-pioneer/)
