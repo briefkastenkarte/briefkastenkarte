@@ -1,6 +1,8 @@
 [![Build and deploy](https://github.com/briefkastenkarte/briefkastenkarte/actions/workflows/test-and-build.yml/badge.svg?branch=main)](https://github.com/briefkastenkarte/briefkastenkarte/actions/workflows/test-and-build.yml)
 [![Audit dependencies (daily)](https://github.com/briefkastenkarte/briefkastenkarte/actions/workflows/audit-dependencies.yml/badge.svg?branch=main)](https://github.com/briefkastenkarte/briefkastenkarte/actions/workflows/audit-dependencies.yml)
 
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
 # briefkastenkarte
 
 Visualizing mailbox locations based on data retrieved from [OpenStreetMap](https://www.openstreetmap.org/).
