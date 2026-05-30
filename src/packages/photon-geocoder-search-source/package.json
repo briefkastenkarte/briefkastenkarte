@@ -1,6 +1,6 @@
 {
     "name": "@briefkastenkarte/photon-geocoder-search-source",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "This package provides an Open Pioneer search source that queries the Photon Geocoder.",
     "license": "Apache-2.0",
     "main": "index.ts",
