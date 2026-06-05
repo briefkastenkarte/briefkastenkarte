@@ -1,4 +1,5 @@
 messages:
+  title: "Post Box Map"
   ariaLabel:
     header: "Header bar"
     map: "Map. Use the arrow keys to move the map. Zoom in with the plus button and zoom out with the minus button."

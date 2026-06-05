@@ -52,7 +52,7 @@ export function AppUI() {
                         textAlign="center"
                     >
                         <SectionHeading size={"md"}>
-                            <Text srOnly>Birefkastenkarte</Text>
+                            <Text srOnly>{intl.formatMessage({ id: "title" })}</Text>
                         </SectionHeading>
                     </Box>
                 }
