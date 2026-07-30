@@ -141,6 +141,9 @@ overrides:
   # https://github.com/advisories/GHSA-52cp-r559-cp3m
   "js-yaml@>=4.0.0 <4.3.0": "^4.3.0"
 
+  # https://github.com/advisories/GHSA-pm4m-ph32-ghv5
+  "js-yaml@>=5.0.0 <=5.2.1  ": "^5.2.2"
+
   # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
   "esbuild@>=0.27.3 <0.28.1": "^0.28.1"
 
@@ -215,6 +218,8 @@ auditConfig:
   ignoreGhsas:
     # https://github.com/advisories/GHSA-f886-m6hf-6m8v CVE-2026-33750
     - GHSA-f886-m6hf-6m8v
+    # https://github.com/advisories/GHSA-mh99-v99m-4gvg CVE-2026-14257
+    - GHSA-mh99-v99m-4gvg
 
 # Only run build scripts for allowed packages.
 allowBuilds:
