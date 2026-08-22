@@ -6,7 +6,7 @@ packages:
 # Shared version expressions (yaml anchors).
 # This is a yaml feature and is not interpreted by pnpm directly.
 __versions:
-  - &react_version ^19.2.7
+  - &react_version ^19.2.8
   - &core_packages_version ^4.6.0
   - &ol_base_packages_version ^1.3.0
 
@@ -54,14 +54,14 @@ catalog:
   "@testing-library/dom": ^10.4.1
   "@testing-library/jest-dom": ^6.9.1
   "@testing-library/react": ^16.3.2
-  "@testing-library/user-event": ^14.6.1
+  "@testing-library/user-event": ^14.6.5
   "@types/js-yaml": ^4.0.9
   "@types/node": ^20.19.41
-  "@types/react-dom": ^19.2.3
-  "@types/react": ^19.2.17
-  "@typescript-eslint/parser": ^8.64.0
-  "@vitejs/plugin-react": ^6.0.3
-  "typescript-eslint": ^8.64.0
+  "@types/react-dom": ^19.2.4
+  "@types/react": ^19.2.18
+  "@typescript-eslint/parser": ^8.67.0
+  "@vitejs/plugin-react": ^6.0.5
+  "typescript-eslint": ^8.67.0
   eslint-config-prettier: ^10.1.8
   eslint-import-resolver-typescript: ^4.4.5
   eslint-plugin-headers: ^1.3.4
@@ -73,88 +73,27 @@ catalog:
   eslint: ^9.39.4
   fast-glob: ^3.3.3
   handlebars: ^4.7.9
-  happy-dom: ^20.11.0
+  happy-dom: ^20.11.2
   husky: ^9.1.7
   js-yaml: ^4.3.0
   jsdom: ^29.1.1
-  lint-staged: ^17.1.0
-  prettier: ^3.9.5
+  lint-staged: ^17.3.0
+  prettier: ^3.9.6
   rimraf: ^6.1.3
-  sass: ^1.101.0
-  tsx: ^4.23.1
+  sass: ^1.102.0
+  tsx: ^4.23.12
   typedoc: ^0.28.19
   typescript: ^6.0.3
   vite-plugin-eslint: ^1.8.1
-  vite: ^8.1.5
-  vitest: ^4.1.10
+  vite: ^8.2.1
+  vitest: ^4.1.11
 
 overrides:
   # https://github.com/advisories/GHSA-qjx8-664m-686j
   "js-cookie@<=3.0.5": "^3.0.7"
 
-  # https://github.com/advisories/GHSA-rf6f-7fwh-wjgh
-  "flatted@<=3.4.1": "^3.4.2"
-
-  # https://github.com/advisories/GHSA-3v7f-55p6-f55p
-  # https://github.com/advisories/GHSA-c2c7-rcm5-vvqj
-  "picomatch@<2.3.2": "^2.3.2"
-  "picomatch@>=3.0.0 <3.0.2": "^3.0.2"
-  "picomatch@>=4.0.0 <4.0.4": "^4.0.4"
-
-  # https://github.com/advisories/GHSA-j452-xhg8-qg39
-  "protocol-buffers-schema@<3.6.1": "^3.6.1"
-
-  # https://github.com/advisories/GHSA-w5hq-g745-h8pq
-  "uuid@<14.0.0": "^14.0.0"
-
-  # https://github.com/advisories/GHSA-qx2v-qp2m-jg93
-  "postcss@<8.5.10": "^8.5.10"
-
-  # https://github.com/advisories/GHSA-jxxr-4gwj-5jf2
-  "brace-expansion@>=5.0.0 <5.0.6": "^5.0.6"
-
-  # https://github.com/advisories/GHSA-3jxr-9vmj-r5cp
-  "brace-expansion@<1.1.16": "^1.1.16"
-  "brace-expansion@>=3.0.0 <5.0.7": "^5.0.7"
-
-  # https://github.com/advisories/GHSA-58qx-3vcg-4xpx
-  "ws@>=8.0.0 <8.20.1": "^8.20.1"
-
-  # https://github.com/advisories/GHSA-vmh5-mc38-953g
-  # https://github.com/advisories/GHSA-vxpw-j846-p89q
-  # https://github.com/advisories/GHSA-hm92-r4w5-c3mj
-  # https://github.com/advisories/GHSA-p88m-4jfj-68fv
-  # https://github.com/advisories/GHSA-pr7r-676h-xcf6
-  # https://github.com/advisories/GHSA-35p6-xmwp-9g52
-  # https://github.com/advisories/GHSA-g8m3-5g58-fq7m
-  "undici@>=7.0.0 <7.28.0": "^7.28.0"
-
-  # https://github.com/advisories/GHSA-22p9-wv53-3rq4
-  "linkify-it@<=5.0.0": "^5.0.1"
-
-  # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
-  "markdown-it@<=14.1.1": "^14.1.2"
-
-  # https://github.com/advisories/GHSA-h67p-54hq-rp68
-  "js-yaml@<3.15.0": "^3.15.0"
-
-  # https://github.com/advisories/GHSA-52cp-r559-cp3m
-  "js-yaml@>=4.0.0 <4.3.0": "^4.3.0"
-
-  # https://github.com/advisories/GHSA-pm4m-ph32-ghv5
-  "js-yaml@>=5.0.0 <=5.2.1  ": "^5.2.2"
-
-  # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
-  "esbuild@>=0.27.3 <0.28.1": "^0.28.1"
-
-  # https://github.com/advisories/GHSA-4x5r-pxfx-6jf8
-  "@babel/core@<=7.29.0": "^7.29.1"
-
-  # https://github.com/advisories/GHSA-xvcm-6775-5m9r
-  "immutable@>=5.0.0-beta.1 <5.1.8": "^5.1.8"
-
-  # https://github.com/advisories/GHSA-v245-v573-v5vm
-  "linkify-it@<=5.0.1": "^5.0.2"
+  # https://github.com/advisories/GHSA-4cwx-7wf7-3272
+  "undici@>=7.0.0 <7.29.0": "^7.29.0"
 
   # We don't actually use the babel plugin.
   # The babel runtime is also not used as a production dependency.
@@ -216,10 +155,12 @@ peerDependencyRules:
 
 auditConfig:
   ignoreGhsas:
-    # https://github.com/advisories/GHSA-f886-m6hf-6m8v CVE-2026-33750
-    - GHSA-f886-m6hf-6m8v
     # https://github.com/advisories/GHSA-mh99-v99m-4gvg CVE-2026-14257
     - GHSA-mh99-v99m-4gvg
+    # https://github.com/advisories/GHSA-rgw5-rvv9-x895 CVE-2026-69152
+    - GHSA-rgw5-rvv9-x895
+    # https://github.com/advisories/GHSA-5p4m-2wfm-xmqj
+    - GHSA-5p4m-2wfm-xmqj
 
 # Only run build scripts for allowed packages.
 allowBuilds:
