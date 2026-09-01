@@ -95,6 +95,10 @@ overrides:
   # https://github.com/advisories/GHSA-4cwx-7wf7-3272
   "undici@>=7.0.0 <7.29.0": "^7.29.0"
 
+  # https://github.com/advisories/GHSA-73wf-gq98-2v4g
+  # https://github.com/advisories/GHSA-c83g-rgw3-j3cx
+  "browserslist@<= 4.28.6": "4.28.7"
+
   # We don't actually use the babel plugin.
   # The babel runtime is also not used as a production dependency.
   # See e.g. https://github.com/emotion-js/emotion/issues/2371
