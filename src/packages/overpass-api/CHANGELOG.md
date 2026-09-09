@@ -1,5 +1,11 @@
 # @briefkastenkarte/overpass-api
 
+## 0.3.1
+
+### Patch Changes
+
+- 724e29e: Fix typos and i18n
+
 ## 0.3.0
 
 ### Minor Changes
